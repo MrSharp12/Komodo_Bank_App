@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4868239C-9E53-4DE4-AA0C-515CF2C118EC}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>KomodoBankUI</RootNamespace>
-    <AssemblyName>KomodoBankUI</AssemblyName>
+    <ProjectGuid>{9C5A63ED-1784-4595-813D-E28730C056D7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KomodoBank.Contracts</RootNamespace>
+    <AssemblyName>KomodoBank.Contracts</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -42,18 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="ProgramUI.cs" />
+    <Compile Include="IBankServices.cs" />
+    <Compile Include="IConsole.cs" />
+    <Compile Include="IMaster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RealConsole.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\KomodoBank.Contracts\KomodoBank.Contracts.csproj">
-      <Project>{9c5a63ed-1784-4595-813d-e28730c056d7}</Project>
-      <Name>KomodoBank.Contracts</Name>
+    <ProjectReference Include="..\KomodoBank.Data\KomodoBank.Data.csproj">
+      <Project>{EEEB1FD4-060B-4FFC-A74B-660D450F1384}</Project>
+      <Name>KomodoBank.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

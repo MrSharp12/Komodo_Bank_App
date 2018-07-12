@@ -8,27 +8,56 @@ namespace KomodoBank.Data
 {
     public class Savings : Account
     {
-        private decimal _balance;
+        public decimal Balance { get; private set; } = 300m;
 
-        public decimal Balance
+        public Savings() 
         {
-            get { return _balance; }
-            set
+            
+        }
+
+        public Savings(string lastName, int id)
+        {
+
+        }
+
+        public Savings(string lastName, decimal balance, int id)
+        {
+            Balance = balance;
+        }
+
+        public override void Withdraw(decimal withdrawAmount)
+        {
+            var balanceTotal = Balance -= withdrawAmount;
+            if (balanceTotal < 0)
             {
-                if (value < 1000m)
-                {
-                    throw new ArgumentException("Savings account must have 1000 dollars");
-                }
-                else
-                {
-                    _balance = value;
-                }
+                throw new ArgumentException("Insufficient funds");
+            }
+            else if (withdrawAmount >= 10000m)
+            {
+                throw new ArgumentException("You may not remove funds greater than or equal to 10,000 dollars in one transaction");
+            }
+            else
+            {
+                Balance = balanceTotal;
             }
         }
 
-        public Savings(string lastName, decimal balance, int id) : base(lastName, balance, id)
+        public override decimal Deposit(decimal depositAmount)
         {
-            Balance = balance;
+            return Balance += depositAmount;
+        }
+
+        public void Transfer(decimal transferAmount, Checking checkingAccount)
+        {
+            var balanceTotal = Balance -= transferAmount;
+            if (balanceTotal < 0)
+            {
+                throw new ArgumentException("Insufficient funds");
+            }
+            else
+            {
+                checkingAccount.Deposit(transferAmount);
+            }
         }
     }
 }

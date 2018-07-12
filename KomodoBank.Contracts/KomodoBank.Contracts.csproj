@@ -40,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IBankServices.cs" />
     <Compile Include="IConsole.cs" />
     <Compile Include="IMaster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

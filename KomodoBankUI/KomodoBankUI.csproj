@@ -51,9 +51,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\KomodoBank.BLL\KomodoBank.BLL.csproj">
+      <Project>{9FB54AF7-B338-49D3-A4A4-EEC4740FC18F}</Project>
+      <Name>KomodoBank.BLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\KomodoBank.Contracts\KomodoBank.Contracts.csproj">
       <Project>{9c5a63ed-1784-4595-813d-e28730c056d7}</Project>
       <Name>KomodoBank.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\KomodoBank.Data\KomodoBank.Data.csproj">
+      <Project>{EEEB1FD4-060B-4FFC-A74B-660D450F1384}</Project>
+      <Name>KomodoBank.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

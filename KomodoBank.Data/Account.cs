@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KomodoBank.Data
 {
-    public abstract class Account
+    public abstract class Account 
     {
         private decimal _balance;
 
@@ -23,13 +23,22 @@ namespace KomodoBank.Data
         {
         }
 
-        protected Account(string lastName, int iD)
+        protected Account(string lastName, int id)
         {
             LastName = lastName;
-            ID = iD;
+            ID = id;
         }
 
-        public abstract void Withdraw(decimal withdrawAmount);
-        public abstract decimal Deposit(decimal depositAmount);
+        protected Account(string lastName, decimal balance, int id)
+        {
+            LastName = lastName;
+            Balance = balance;
+            ID = id;
+        }
+
+        //public abstract void Withdraw(decimal withdrawAmount);
+       public abstract decimal Deposit(decimal depositAmount);
+
+        
     }
 }

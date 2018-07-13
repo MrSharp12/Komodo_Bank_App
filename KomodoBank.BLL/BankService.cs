@@ -21,20 +21,5 @@ namespace KomodoBank.BLL
         {
             return _accountList;
         }
-
-        public List<Account> Search(int searchInput)
-        {
-            var contextedList = new List<Account>();
-
-            foreach (var customer in _accountList)
-            {
-                if (customer.ID == searchInput)
-                {
-                    contextedList.Add(customer);
-                }
-            }
-            
-            return contextedList;
-        }
     }
 }

@@ -17,6 +17,10 @@ namespace KomodoBank.BLL
         }
         public Savings CreateSavingsAccount(string nameInput, decimal balanceInput, int idInput)
         {
+            if (balanceInput < 300m)
+            {
+                throw new ArgumentException("Account must have 300 dollars to open");
+            }
             return new Savings(nameInput, balanceInput, idInput);
         }
 

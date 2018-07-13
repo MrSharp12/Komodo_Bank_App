@@ -14,7 +14,7 @@ namespace KomodoBankUI
         private readonly IConsole _console;
         public BankService BankService;
         public SavingsRepo SavingsRepo;
-        private CheckingRepo CheckingRepo;
+        public CheckingRepo CheckingRepo;
 
         public ProgramUI(IConsole consoleForAllReadsAndWrites)
         {
@@ -77,7 +77,7 @@ namespace KomodoBankUI
                 }
                 else if (command == "8")
                 {
-                    Search();//still needs work
+                    Search();
                 }
                 else if (command == "9")
                 {
@@ -162,27 +162,21 @@ namespace KomodoBankUI
 
         public void Deposit()
         {
-            _console.WriteLine("Savings or Checking?:");
+            _console.WriteLine("What account do you want to deposit into: \r\n " +
+                                "1. Savings\r\n " +
+                                "2. Checking");
             var command = _console.ReadLine().ToLower();
 
-            if (command == "savings")
+            if (command == "1")
             {
                 _console.WriteLine("Please select account to deposit funds:");
                 var accountInput = Convert.ToInt32(_console.ReadLine());
 
+                //checks if accounts are present
                 if (SavingsRepo.GetAllSavingsAccounts().Count == 0)
                 {
                     _console.WriteLine("No Accounts Present");
                     return;
-                }
-
-                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
-                {
-                    if (customer.ID != accountInput)
-                    {
-                        _console.WriteLine("Account does not exist");
-                        return;
-                    }
                 }
 
                 _console.WriteLine("Amount to deposit:");
@@ -197,24 +191,16 @@ namespace KomodoBankUI
                 }
                 _console.WriteLine("Deposit successful");
             }
-            else if (command == "checking")
+            else if (command == "2")
             {
                 _console.WriteLine("Please select account to deposit funds:");
                 var accountInput = Convert.ToInt32(_console.ReadLine());
 
+                //checks if accounts are present
                 if (CheckingRepo.GetAllCheckingAccounts().Count == 0)
                 {
                     _console.WriteLine("No Accounts Present");
                     return;
-                }
-
-                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
-                {
-                    if (customer.ID != accountInput)
-                    {
-                        _console.WriteLine("Account does not exist");
-                        return;
-                    }
                 }
 
                 _console.WriteLine("Amount to deposit:");
@@ -237,27 +223,21 @@ namespace KomodoBankUI
 
         public void Withdraw()
         {
-            _console.WriteLine("Savings or Checking?:");
+            _console.WriteLine("What account do you want to withdraw from: \r\n " +
+                                "1. Savings\r\n " +
+                                "2. Checking");
             var command = _console.ReadLine().ToLower();
 
-            if (command == "savings")
+            if (command == "1")
             {
                 _console.WriteLine("Please select account to withdraw funds:");
                 var accountInput = Convert.ToInt32(_console.ReadLine());
 
+                //checks if accounts are present
                 if (SavingsRepo.GetAllSavingsAccounts().Count == 0)
                 {
                     _console.WriteLine("No Accounts Present");
                     return;
-                }
-
-                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
-                {
-                    if (customer.ID != accountInput)
-                    {
-                        _console.WriteLine("Account does not exist");
-                        return;
-                    }
                 }
 
                 _console.WriteLine("Amount to withdraw:");
@@ -272,24 +252,16 @@ namespace KomodoBankUI
                 }
                 _console.WriteLine("Withdraw successful");
             }
-            else if (command == "checking")
+            else if (command == "2")
             {
                 _console.WriteLine("Please select account to withdraw funds:");
                 var accountInput = Convert.ToInt32(_console.ReadLine());
 
+                //checks if accounts are present
                 if (CheckingRepo.GetAllCheckingAccounts().Count == 0)
                 {
                     _console.WriteLine("No Accounts Present");
                     return;
-                }
-
-                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
-                {
-                    if (customer.ID != accountInput)
-                    {
-                        _console.WriteLine("Account does not exist");
-                        return;
-                    }
                 }
 
                 _console.WriteLine("Amount to withdraw:");
@@ -312,27 +284,21 @@ namespace KomodoBankUI
 
         public void Transfer()
         {
-            _console.WriteLine("Transfer from savings or checking?:");
+            _console.WriteLine("What account do you want to transfer from: \r\n " +
+                                "1. Savings\r\n " +
+                                "2. Checking");
             var command = _console.ReadLine().ToLower();
 
-            if (command == "savings")
+            if (command == "1")
             {
                 _console.WriteLine("Please select account to transfer funds from:");
                 var accountInput = Convert.ToInt32(_console.ReadLine());
 
+                //checks if accounts are present
                 if (SavingsRepo.GetAllSavingsAccounts().Count == 0)
                 {
                     _console.WriteLine("No Accounts Present");
                     return;
-                }
-
-                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
-                {
-                    if (customer.ID != accountInput)
-                    {
-                        _console.WriteLine("Account does not exist");
-                        return;
-                    }
                 }
 
                 _console.WriteLine("Amount to transfer:");
@@ -349,19 +315,11 @@ namespace KomodoBankUI
                 _console.WriteLine("Please select account to transfer funds to:");
                 var accountToReceiveInput = Convert.ToInt32(_console.ReadLine());
 
+                //checks if accounts are present
                 if (CheckingRepo.GetAllCheckingAccounts().Count == 0)
                 {
                     _console.WriteLine("No Accounts Present");
                     return;
-                }
-
-                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
-                {
-                    if (customer.ID != accountToReceiveInput)
-                    {
-                        _console.WriteLine("Account does not exist");
-                        return;
-                    }
                 }
 
                 foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
@@ -373,24 +331,16 @@ namespace KomodoBankUI
                     }
                 }
             }
-            else if (command == "checking")
+            else if (command == "2")
             {
                 _console.WriteLine("Please select account to transfer funds from:");
                 var accountInput = Convert.ToInt32(_console.ReadLine());
 
+                //checks if accounts are present
                 if (CheckingRepo.GetAllCheckingAccounts().Count == 0)
                 {
                     _console.WriteLine("No Accounts Present");
                     return;
-                }
-
-                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
-                {
-                    if (customer.ID != accountInput)
-                    {
-                        _console.WriteLine("Account does not exist");
-                        return;
-                    }
                 }
 
                 _console.WriteLine("Amount to transfer:");
@@ -407,19 +357,11 @@ namespace KomodoBankUI
                 _console.WriteLine("Please select account to transfer funds to:");
                 var accountToReceiveInput = Convert.ToInt32(_console.ReadLine());
 
+                //checks if accounts are present
                 if (SavingsRepo.GetAllSavingsAccounts().Count == 0)
                 {
                     _console.WriteLine("No Accounts Present");
                     return;
-                }
-
-                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
-                {
-                    if (customer.ID != accountToReceiveInput)
-                    {
-                        _console.WriteLine("Account does not exist");
-                        return;
-                    }
                 }
 
                 foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
@@ -443,6 +385,8 @@ namespace KomodoBankUI
             {
                 _console.WriteLine("Displaying all accounts");
 
+                //loops through master list
+                //then loops account specific lists
                 foreach (var account in BankService.GetAllAccounts())
                 {
                     if (account is Savings savingsAccount)
@@ -509,23 +453,35 @@ namespace KomodoBankUI
             {
                 _console.WriteLine("Enter account number:");
                 var searchInput = Convert.ToInt32(_console.ReadLine());
-                var contextedSearch = BankService.Search(searchInput);
+                _console.WriteLine("Display search results");
 
-                _console.WriteLine("Display Search Results");
-
-                foreach (var account in contextedSearch)
+                //loops through all accounts
+                //then loops through banking or savings based on searchInput
+                foreach (var account in BankService.GetAllAccounts())
                 {
-                    if (account is Savings)
+                    if (account.ID == searchInput && account is Savings)
                     {
-                        _console.WriteLine($"Last Name: {account.LastName}\n" +
-                                       $"ID: {account.ID}\n" +
-                                       $"Balance: {account.Balance}\n");
+                        foreach (var savingsAccount in SavingsRepo.GetAllSavingsAccounts())
+                        {
+                            if (savingsAccount.ID == searchInput)
+                            {
+                                _console.WriteLine($"Last Name: {savingsAccount.LastName}\n" +
+                                           $"ID: {savingsAccount.ID}\n" +
+                                           $"Balance: {savingsAccount.Balance}\n");
+                            }
+                        }
                     }
-                    if (account is Checking)
+                    if (account.ID == searchInput && account is Checking)
                     {
-                        _console.WriteLine($"Last Name: {account.LastName}\n" +
-                                           $"ID: {account.ID}\n" +
-                                           $"Balance: {account.Balance}\n");
+                        foreach (var checkingAccount in CheckingRepo.GetAllCheckingAccounts())
+                        {
+                            if (checkingAccount.ID == searchInput)
+                            {
+                                _console.WriteLine($"Last Name: {checkingAccount.LastName}\n" +
+                                           $"ID: {checkingAccount.ID}\n" +
+                                           $"Balance: {checkingAccount.Balance}\n");
+                            }
+                        }
                     }
                 }
             }
@@ -534,8 +490,5 @@ namespace KomodoBankUI
                 _console.WriteLine("The list is empty");
             }
         }
-
     }
-
-
 }

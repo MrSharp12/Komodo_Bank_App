@@ -52,8 +52,18 @@ namespace KomodoBank.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException),
+        "Account must have 300 dollars to open")]
+        public void SavingsAccount_CreationOfSavingsAccountWithout300DollarWillThrowException_ShouldSucceed()
+        {
+            //arrange
+            var newSavingsRepo = new SavingsRepo();
+            var savingsAccount = newSavingsRepo.CreateSavingsAccount("Jeffries", 200m, 123456);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException),
         "Insufficient funds")]
-        public void SavingsAccount_InsufficientFundsExceptionError_ShouldSucceed()
+        public void SavingsAccount_WithdrawInsufficientFundsExceptionError_ShouldSucceed()
         {
             //arrange
             var savingsAccount = new Savings("Jeffries", 2000m, 233456);
@@ -100,36 +110,67 @@ namespace KomodoBank.Tests
             Assert.AreEqual(expected, actual);
         }
 
-        //[TestMethod]
-        //public void SavingsAccount_TransferMethod_ValidateThatCheckingBalanceIncreases_ShouldSucceed()
-        //{
-        //    //arrange
-        //    var savingsAccount = new Savings("Jeffries", 20000m, 233456);
-        //    var checkingAccount = new Checking("Jeffries", 3000m, 123456);
-        //    savingsAccount.Transfer(1000m, checkingAccount);
+        [TestMethod]
+        public void SavingsAccount_TransferMethod_ValidateThatCheckingBalanceIncreases_ShouldSucceed()
+        {
+            //arrange
+            var savingsAccount = new Savings("Jeffries", 20000m, 233456);
+            var checkingAccount = new Checking("Jeffries", 3000m, 123456);
+            savingsAccount.Transfer(1000m, checkingAccount);
 
-        //    //act
-        //    var expected = 4000m;
-        //    var actual = checkingAccount.Balance;
+            //act
+            var expected = 4000m;
+            var actual = checkingAccount.Balance;
 
-        //    //assert
-        //    Assert.AreEqual(expected, actual);
-        //}
+            //assert
+            Assert.AreEqual(expected, actual);
+        }
 
-        //[TestMethod]
-        //public void SavingsAccount_TransferMethod_ValidateThatSavingBalanceDecreases_ShouldSucceed()
-        //{
-        //    //arrange
-        //    var savingsAccount = new Savings("Jeffries", 20000m, 233456);
-        //    var checkingAccount = new Checking("Jeffries", 3000m, 123456);
-        //    savingsAccount.Transfer(1000m, checkingAccount);
+        [TestMethod]
+        public void SavingsAccount_TransferMethod_ValidateThatSavingBalanceDecreases_ShouldSucceed()
+        {
+            //arrange
+            var savingsAccount = new Savings("Jeffries", 20000m, 233456);
+            var checkingAccount = new Checking("Jeffries", 3000m, 123456);
+            savingsAccount.Transfer(1000m, checkingAccount);
 
-        //    //act
-        //    var expected = 19000m;
-        //    var actual = savingsAccount.Balance;
+            //act
+            var expected = 19000m;
+            var actual = savingsAccount.Balance;
 
-        //    //assert
-        //    Assert.AreEqual(expected, actual);
-        //}
+            //assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException),
+        "Insufficient funds")]
+        public void SavingsAccount_TransferInsufficientFundsExceptionError_ShouldSucceed()
+        {
+            //arrange
+            var savingsAccount = new Savings("Jeffries", 20000m, 233456);
+            var checkingAccount = new Checking("Jeffries", 3000m, 123456);
+            savingsAccount.Transfer(3000000m, checkingAccount);
+        }
+
+        [TestMethod]
+        public void SavingsAccount_GetAllSavingsAccounts_ShouldSucceed()
+        {
+            //arrange
+            var savingsAccount = new Savings("Jeffries", 20000m, 233456);
+            var savingsAccount1 = new Savings("Sharp", 3000m, 123456);
+            var savingsAccount2 = new Savings("Stewart", 4000m, 223456);
+            var savingsRepo = new SavingsRepo();
+            savingsRepo.AddAccountToSavingsList(savingsAccount);
+            savingsRepo.AddAccountToSavingsList(savingsAccount1);
+            savingsRepo.AddAccountToSavingsList(savingsAccount2);
+
+            //act
+            var expected = 3;
+            var actual = savingsRepo.GetAllSavingsAccounts().Count;
+
+            //assert
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

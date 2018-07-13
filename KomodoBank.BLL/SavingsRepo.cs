@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KomodoBank.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,27 @@ namespace KomodoBank.BLL
 {
     public class SavingsRepo
     {
-        
+        private List<Savings> _savingsAccountList = new List<Savings>();
+
+        public Savings CreateSavingsAccountWithMinimumBalance(string nameInput, int idInput)
+        {
+            return new Savings(nameInput, idInput);
+        }
+        public Savings CreateSavingsAccount(string nameInput, decimal balanceInput, int idInput)
+        {
+            return new Savings(nameInput, balanceInput, idInput);
+        }
+
+        public void AddAccountToSavingsList(Savings customer)
+        {
+            _savingsAccountList.Add(customer);
+        }
+
+        public List<Savings> GetAllSavingsAccounts()
+        {
+            return _savingsAccountList;
+        }
+
+       
     }
 }

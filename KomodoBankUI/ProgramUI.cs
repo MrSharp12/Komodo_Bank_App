@@ -13,13 +13,15 @@ namespace KomodoBankUI
     {
         private readonly IConsole _console;
         public BankService BankService;
-        public Savings Savings;
+        public SavingsRepo SavingsRepo;
+        private CheckingRepo CheckingRepo;
 
         public ProgramUI(IConsole consoleForAllReadsAndWrites)
         {
             _console = consoleForAllReadsAndWrites;
             BankService = new BankService();
-            Savings = new Savings();
+            SavingsRepo = new SavingsRepo();
+            CheckingRepo = new CheckingRepo();
         }
 
         public void Run()
@@ -55,11 +57,11 @@ namespace KomodoBankUI
                 }
                 else if (command == "3")
                 {
-                    _console.WriteLine("3");
+                    Withdraw();
                 }
                 else if (command == "4")
                 {
-                    _console.WriteLine("4");
+                    Transfer();
                 }
                 else if (command == "5")
                 {
@@ -67,15 +69,15 @@ namespace KomodoBankUI
                 }
                 else if (command == "6")
                 {
-                    _console.WriteLine("6");
+                    SeeAllCheckingAccounts();
                 }
                 else if (command == "7")
                 {
-                    _console.WriteLine("7");
+                    SeeAllSavingsAccounts();
                 }
                 else if (command == "8")
                 {
-                    _console.WriteLine("8");
+                    Search();//still needs work
                 }
                 else if (command == "9")
                 {
@@ -109,8 +111,9 @@ namespace KomodoBankUI
                     _console.WriteLine("Enter ID:");
                     var idInput = Convert.ToInt32(_console.ReadLine());
 
-                    var newSavingsAccount = BankService.CreateSavingsAccountWithMinimumBalance(nameInput, idInput);
+                    var newSavingsAccount = SavingsRepo.CreateSavingsAccountWithMinimumBalance(nameInput, idInput);
                     BankService.AddAccountToMasterList(newSavingsAccount);
+                    SavingsRepo.AddAccountToSavingsList(newSavingsAccount);
                     _console.WriteLine("Account created");
 
                 }
@@ -125,8 +128,9 @@ namespace KomodoBankUI
                     _console.WriteLine("Enter ID:");
                     var idInput = Convert.ToInt32(_console.ReadLine());
 
-                    var newSavingsAccount = BankService.CreateSavingsAccount(nameInput, balanceInput, idInput);
+                    var newSavingsAccount = SavingsRepo.CreateSavingsAccount(nameInput, balanceInput, idInput);
                     BankService.AddAccountToMasterList(newSavingsAccount);
+                    SavingsRepo.AddAccountToSavingsList(newSavingsAccount);
                     _console.WriteLine("Account created");
                 }
                 else
@@ -145,31 +149,292 @@ namespace KomodoBankUI
                 _console.WriteLine("Enter ID:");
                 var idInput = Convert.ToInt32(_console.ReadLine());
 
-                var newCheckingAccount = BankService.CreateCheckingAccount(nameInput, balanceInput, idInput);
+                var newCheckingAccount = CheckingRepo.CreateCheckingAccount(nameInput, balanceInput, idInput);
                 BankService.AddAccountToMasterList(newCheckingAccount);
+                CheckingRepo.AddAccountToCheckingList(newCheckingAccount);
                 _console.WriteLine("Account created");
+            }
+            else
+            {
+                _console.WriteLine("Please enter a valid option");
             }
         }
 
         public void Deposit()
         {
-            _console.WriteLine("Please select account to deposit funds:");
-            var accountInput = Convert.ToInt32(_console.ReadLine());
+            _console.WriteLine("Savings or Checking?:");
+            var command = _console.ReadLine().ToLower();
 
-            _console.WriteLine("Amount to deposit:");
-            var depositAmount = Convert.ToDecimal(_console.ReadLine());
-
-            foreach (var customer in BankService.GetAllAccounts())
+            if (command == "savings")
             {
-                if (customer.ID == accountInput && customer is Savings)
+                _console.WriteLine("Please select account to deposit funds:");
+                var accountInput = Convert.ToInt32(_console.ReadLine());
+
+                if (SavingsRepo.GetAllSavingsAccounts().Count == 0)
                 {
-                    customer.Deposit(depositAmount);
+                    _console.WriteLine("No Accounts Present");
+                    return;
+                }
+
+                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
+                {
+                    if (customer.ID != accountInput)
+                    {
+                        _console.WriteLine("Account does not exist");
+                        return;
+                    }
+                }
+
+                _console.WriteLine("Amount to deposit:");
+                var depositAmount = Convert.ToDecimal(_console.ReadLine());
+
+                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
+                {
+                    if (customer.ID == accountInput)
+                    {
+                        customer.Deposit(depositAmount);
+                    }
+                }
+                _console.WriteLine("Deposit successful");
+            }
+            else if (command == "checking")
+            {
+                _console.WriteLine("Please select account to deposit funds:");
+                var accountInput = Convert.ToInt32(_console.ReadLine());
+
+                if (CheckingRepo.GetAllCheckingAccounts().Count == 0)
+                {
+                    _console.WriteLine("No Accounts Present");
+                    return;
+                }
+
+                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
+                {
+                    if (customer.ID != accountInput)
+                    {
+                        _console.WriteLine("Account does not exist");
+                        return;
+                    }
+                }
+
+                _console.WriteLine("Amount to deposit:");
+                var depositAmount = Convert.ToDecimal(_console.ReadLine());
+
+                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
+                {
+                    if (customer.ID == accountInput)
+                    {
+                        customer.Deposit(depositAmount);
+                    }
+                }
+                _console.WriteLine("Deposit successful");
+            }
+            else
+            {
+                _console.WriteLine("Please enter a valid option");
+            }
+        }
+
+        public void Withdraw()
+        {
+            _console.WriteLine("Savings or Checking?:");
+            var command = _console.ReadLine().ToLower();
+
+            if (command == "savings")
+            {
+                _console.WriteLine("Please select account to withdraw funds:");
+                var accountInput = Convert.ToInt32(_console.ReadLine());
+
+                if (SavingsRepo.GetAllSavingsAccounts().Count == 0)
+                {
+                    _console.WriteLine("No Accounts Present");
+                    return;
+                }
+
+                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
+                {
+                    if (customer.ID != accountInput)
+                    {
+                        _console.WriteLine("Account does not exist");
+                        return;
+                    }
+                }
+
+                _console.WriteLine("Amount to withdraw:");
+                var depositAmount = Convert.ToDecimal(_console.ReadLine());
+
+                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
+                {
+                    if (customer.ID == accountInput)
+                    {
+                        customer.Withdraw(depositAmount);
+                    }
+                }
+                _console.WriteLine("Withdraw successful");
+            }
+            else if (command == "checking")
+            {
+                _console.WriteLine("Please select account to withdraw funds:");
+                var accountInput = Convert.ToInt32(_console.ReadLine());
+
+                if (CheckingRepo.GetAllCheckingAccounts().Count == 0)
+                {
+                    _console.WriteLine("No Accounts Present");
+                    return;
+                }
+
+                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
+                {
+                    if (customer.ID != accountInput)
+                    {
+                        _console.WriteLine("Account does not exist");
+                        return;
+                    }
+                }
+
+                _console.WriteLine("Amount to withdraw:");
+                var depositAmount = Convert.ToDecimal(_console.ReadLine());
+
+                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
+                {
+                    if (customer.ID == accountInput)
+                    {
+                        customer.Withdraw(depositAmount);
+                    }
+                }
+                _console.WriteLine("Withdraw successful");
+            }
+            else
+            {
+                _console.WriteLine("Please enter a valid option");
+            }
+        }
+
+        public void Transfer()
+        {
+            _console.WriteLine("Transfer from savings or checking?:");
+            var command = _console.ReadLine().ToLower();
+
+            if (command == "savings")
+            {
+                _console.WriteLine("Please select account to transfer funds from:");
+                var accountInput = Convert.ToInt32(_console.ReadLine());
+
+                if (SavingsRepo.GetAllSavingsAccounts().Count == 0)
+                {
+                    _console.WriteLine("No Accounts Present");
+                    return;
+                }
+
+                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
+                {
+                    if (customer.ID != accountInput)
+                    {
+                        _console.WriteLine("Account does not exist");
+                        return;
+                    }
+                }
+
+                _console.WriteLine("Amount to transfer:");
+                var transferAmount = Convert.ToDecimal(_console.ReadLine());
+
+                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
+                {
+                    if (customer.ID == accountInput)
+                    {
+                        customer.Withdraw(transferAmount);
+                    }
+                }
+
+                _console.WriteLine("Please select account to transfer funds to:");
+                var accountToReceiveInput = Convert.ToInt32(_console.ReadLine());
+
+                if (CheckingRepo.GetAllCheckingAccounts().Count == 0)
+                {
+                    _console.WriteLine("No Accounts Present");
+                    return;
+                }
+
+                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
+                {
+                    if (customer.ID != accountToReceiveInput)
+                    {
+                        _console.WriteLine("Account does not exist");
+                        return;
+                    }
+                }
+
+                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
+                {
+                    if (customer.ID == accountToReceiveInput)
+                    {
+                        customer.Deposit(transferAmount);
+                        _console.WriteLine("Transfer successful");
+                    }
                 }
             }
+            else if (command == "checking")
+            {
+                _console.WriteLine("Please select account to transfer funds from:");
+                var accountInput = Convert.ToInt32(_console.ReadLine());
 
-            
+                if (CheckingRepo.GetAllCheckingAccounts().Count == 0)
+                {
+                    _console.WriteLine("No Accounts Present");
+                    return;
+                }
 
-            //Savings.Deposit(accountInput, depositAmount);
+                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
+                {
+                    if (customer.ID != accountInput)
+                    {
+                        _console.WriteLine("Account does not exist");
+                        return;
+                    }
+                }
+
+                _console.WriteLine("Amount to transfer:");
+                var transferAmount = Convert.ToDecimal(_console.ReadLine());
+
+                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
+                {
+                    if (customer.ID == accountInput)
+                    {
+                        customer.Withdraw(transferAmount);
+                    }
+                }
+
+                _console.WriteLine("Please select account to transfer funds to:");
+                var accountToReceiveInput = Convert.ToInt32(_console.ReadLine());
+
+                if (SavingsRepo.GetAllSavingsAccounts().Count == 0)
+                {
+                    _console.WriteLine("No Accounts Present");
+                    return;
+                }
+
+                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
+                {
+                    if (customer.ID != accountToReceiveInput)
+                    {
+                        _console.WriteLine("Account does not exist");
+                        return;
+                    }
+                }
+
+                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
+                {
+                    if (customer.ID == accountToReceiveInput)
+                    {
+                        customer.Deposit(transferAmount);
+                        _console.WriteLine("Transfer successful");
+                    }
+                }
+            }
+            else
+            {
+                _console.WriteLine("Please enter a valid option");
+            }
         }
 
         public void SeeAllAccounts()
@@ -178,11 +443,90 @@ namespace KomodoBankUI
             {
                 _console.WriteLine("Displaying all accounts");
 
-                foreach (var customer in BankService.GetAllAccounts())
+                foreach (var account in BankService.GetAllAccounts())
+                {
+                    if (account is Savings savingsAccount)
+                    {
+                        _console.WriteLine($"Last Name: {savingsAccount.LastName}\n" +
+                                          $"ID: {savingsAccount.ID}\n" +
+                                          $"Balance: {savingsAccount.Balance}\n");
+                    }
+                    else if (account is Checking checkingAccount)
+                    {
+                        _console.WriteLine($"Last Name: {checkingAccount.LastName}\n" +
+                                           $"ID: {checkingAccount.ID}\n" +
+                                           $"Balance: {checkingAccount.Balance}\n");
+                    }
+                }
+            }
+            else
+            {
+                _console.WriteLine("The list is empty");
+            }
+        }
+
+        public void SeeAllSavingsAccounts()
+        {
+            if (SavingsRepo.GetAllSavingsAccounts().Count > 0)
+            {
+                _console.WriteLine("Displaying all savings accounts");
+
+                foreach (var customer in SavingsRepo.GetAllSavingsAccounts())
                 {
                     _console.WriteLine($"Last Name: {customer.LastName}\n" +
                                        $"ID: {customer.ID}\n" +
                                        $"Balance: {customer.Balance}\n");
+                }
+            }
+            else
+            {
+                _console.WriteLine("The list is empty");
+            }
+        }
+
+        public void SeeAllCheckingAccounts()
+        {
+            if (CheckingRepo.GetAllCheckingAccounts().Count > 0)
+            {
+                _console.WriteLine("Displaying all checking accounts");
+
+                foreach (var customer in CheckingRepo.GetAllCheckingAccounts())
+                {
+                    _console.WriteLine($"Last Name: {customer.LastName}\n" +
+                                       $"ID: {customer.ID}\n" +
+                                       $"Balance: {customer.Balance}\n");
+                }
+            }
+            else
+            {
+                _console.WriteLine("The list is empty");
+            }
+        }
+
+        public void Search()
+        {
+            if (BankService.GetAllAccounts().Count > 0)
+            {
+                _console.WriteLine("Enter account number:");
+                var searchInput = Convert.ToInt32(_console.ReadLine());
+                var contextedSearch = BankService.Search(searchInput);
+
+                _console.WriteLine("Display Search Results");
+
+                foreach (var account in contextedSearch)
+                {
+                    if (account is Savings)
+                    {
+                        _console.WriteLine($"Last Name: {account.LastName}\n" +
+                                       $"ID: {account.ID}\n" +
+                                       $"Balance: {account.Balance}\n");
+                    }
+                    if (account is Checking)
+                    {
+                        _console.WriteLine($"Last Name: {account.LastName}\n" +
+                                           $"ID: {account.ID}\n" +
+                                           $"Balance: {account.Balance}\n");
+                    }
                 }
             }
             else

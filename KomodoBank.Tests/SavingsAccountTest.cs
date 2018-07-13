@@ -23,23 +23,10 @@ namespace KomodoBank.Tests
         }
 
         [TestMethod]
-        public void SavingsAccount_CreateSavingsAccountMethodIsTypeOf_ShouldSucceed()
-        {
-            //arrange
-            var newSavingsAccount = new BankService();
-            var actual = newSavingsAccount.CreateSavingsAccountWithMinimumBalance("Jeffries", 123456);
-
-            //act
-
-            //assert
-            Assert.IsInstanceOfType(actual, typeof(Savings));
-        }
-
-        [TestMethod]
         public void SavingsAccount_CreateSavingsAccountMethodWithMinimumBalance_ShouldSucceed()
         {
             //arrange
-            var newSavingsAccount = new BankService();
+            var newSavingsAccount = new SavingsRepo();
 
             //act
             var expected = 300m;
@@ -50,23 +37,10 @@ namespace KomodoBank.Tests
         }
 
         [TestMethod]
-        public void SavingsAccount_CreateAdditionalSavingsAccountMethodIsTypeOf_ShouldSucceed()
-        {
-            //arrange
-            var newSavingsAccount = new BankService();
-            var actual = newSavingsAccount.CreateSavingsAccount("Jeffries", 1000m, 123456);
-
-            //act
-
-            //assert
-            Assert.IsInstanceOfType(actual, typeof(Savings));
-        }
-
-        [TestMethod]
         public void SavingsAccount_CreateAdditionalSavingsAccountMethod_ShouldSucceed()
         {
             //arrange
-            var newSavingsAccount = new BankService();
+            var newSavingsAccount = new SavingsRepo();
 
             //act
             var expected = 1000m;
@@ -76,42 +50,40 @@ namespace KomodoBank.Tests
             Assert.AreEqual(expected, actual.Balance);
         }
 
-        //[TestMethod]
-        //[ExpectedException(typeof(ArgumentException),
-        //"Insufficient funds")]
-        //public void SavingsAccount_InsufficientFundsExceptionError_ShouldSucceed()
-        //{
-        //    //arrange
-        //    var savingsAccount = new Savings("Jeffries", 2000m, 233456);
-        //    savingsAccount.Withdraw(3000m);
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException),
+        "Insufficient funds")]
+        public void SavingsAccount_InsufficientFundsExceptionError_ShouldSucceed()
+        {
+            //arrange
+            var savingsAccount = new Savings("Jeffries", 2000m, 233456);
+            savingsAccount.Withdraw(3000m);
+        }
 
-        //}
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException),
+        "You may not remove funds greater than or equal to 10,000 dollars in one transaction")]
+        public void SavingsAccount_WithdrawLargerThanTenGrandExceptionError_ShouldSucceed()
+        {
+            //arrange
+            var savingsAccount = new Savings("Jeffries", 20000m, 233456);
+            savingsAccount.Withdraw(15000m);
+        }
 
-        //[TestMethod]
-        //[ExpectedException(typeof(ArgumentException),
-        //"You may not remove funds greater than or equal to 10,000 dollars in one transaction")]
-        //public void SavingsAccount_WithdrawLargerThanTenGrandExceptionError_ShouldSucceed()
-        //{
-        //    //arrange
-        //    var savingsAccount = new Savings("Jeffries", 20000m, 233456);
-        //    savingsAccount.Withdraw(15000m);
+        [TestMethod]
+        public void SavingsAccount_WithdrawMethod_ShouldSucceed()
+        {
+            //arrange
+            var savingsAccount = new Savings("Jeffries", 20000m, 233456);
+            savingsAccount.Withdraw(1000m);
 
-        //}
+            //act
+            var expected = 19000m;
+            var actual = savingsAccount.Balance;
 
-        //[TestMethod]
-        //public void SavingsAccount_WithdrawMethod_ShouldSucceed()
-        //{
-        //    //arrange
-        //    var savingsAccount = new Savings("Jeffries", 20000m, 233456);
-        //    savingsAccount.Withdraw(1000m);
-
-        //    //act
-        //    var expected = 19000m;
-        //    var actual = savingsAccount.Balance;
-
-        //    //assert
-        //    Assert.AreEqual(expected, actual);
-        //}
+            //assert
+            Assert.AreEqual(expected, actual);
+        }
 
         [TestMethod]
         public void SavingsAccount_DepositMethod_ShouldSucceed()

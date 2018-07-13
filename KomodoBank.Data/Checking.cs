@@ -16,9 +16,8 @@ namespace KomodoBank.Data
         {
         }
 
-        public Checking(string lastName, int id)
+        public Checking(string lastName, int id) : base (lastName, id)
         {
-
         }
 
         public Checking(string lastName, decimal balance, int id) : base (lastName, balance, id)
@@ -28,23 +27,23 @@ namespace KomodoBank.Data
             ID = id;
         }
 
-        public override decimal Deposit(decimal depositAmount)
+        public decimal Deposit(decimal depositAmount)
         {
             return Balance += depositAmount;
         }
 
-        //public override void Withdraw(decimal withdrawAmount)
-        //{
-        //    var balanceTotal = Balance -= withdrawAmount;
-        //    if (balanceTotal < 0)
-        //    {
-        //        throw new ArgumentException("Insufficient funds");
-        //    }
-        //    else
-        //    {
-        //        Balance = balanceTotal;
-        //    }
-        //}
+        public void Withdraw(decimal withdrawAmount)
+        {
+            var balanceTotal = Balance -= withdrawAmount;
+            if (balanceTotal < 0)
+            {
+                throw new ArgumentException("Insufficient funds");
+            }
+            else
+            {
+                Balance = balanceTotal;
+            }
+        }
 
         public void Transfer(decimal transferAmount, Savings savingsAccount)
         {
@@ -56,6 +55,7 @@ namespace KomodoBank.Data
             else
             {
                 savingsAccount.Deposit(transferAmount);
+                Balance = balanceTotal;
             }
         }
     }

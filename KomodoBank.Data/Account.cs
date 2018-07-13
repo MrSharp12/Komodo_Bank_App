@@ -8,14 +8,7 @@ namespace KomodoBank.Data
 {
     public abstract class Account 
     {
-        private decimal _balance;
-
-        public decimal Balance
-        {
-            get { return _balance; }
-            private set { _balance = value; }
-        }
-
+        public decimal Balance { get; private set; }
         public string LastName { get; private set; }
         public int ID { get; private set; }
 
@@ -35,10 +28,5 @@ namespace KomodoBank.Data
             Balance = balance;
             ID = id;
         }
-
-        //public abstract void Withdraw(decimal withdrawAmount);
-       public abstract decimal Deposit(decimal depositAmount);
-
-        
     }
 }

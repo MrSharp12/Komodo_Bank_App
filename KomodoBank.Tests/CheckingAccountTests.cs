@@ -8,16 +8,16 @@ namespace KomodoBank.Tests
     [TestClass]
     public class CheckingAccountTests
     {
-        //[TestMethod]
-        //[ExpectedException(typeof(ArgumentException),
-        //"Insufficient funds")]
-        //public void CheckingAccount_InsufficientFundsExceptionError_ShouldSucceed()
-        //{
-        //    //arrange
-        //    var checkingAccount = new Checking("Jeffries", 2000m, 233456);
-        //    checkingAccount.Withdraw(3000m);
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException),
+        "Insufficient funds")]
+        public void CheckingAccount_InsufficientFundsExceptionError_ShouldSucceed()
+        {
+            //arrange
+            var checkingAccount = new Checking("Jeffries", 2000m, 233456);
+            checkingAccount.Withdraw(3000m);
 
-        //}
+        }
 
         [TestMethod]
         public void CheckingAccount_DepositMethod_ShouldSucceed()
@@ -34,20 +34,20 @@ namespace KomodoBank.Tests
             Assert.AreEqual(expected, actual);
         }
 
-        //[TestMethod]
-        //public void CheckingAccount_WithdrawMethod_ShouldSucceed()
-        //{
-        //    //arrange
-        //    var checkingAccount = new Savings("Jeffries", 20000m, 233456);
-        //    checkingAccount.Withdraw(1000m);
+        [TestMethod]
+        public void CheckingAccount_WithdrawMethod_ShouldSucceed()
+        {
+            //arrange
+            var checkingAccount = new Savings("Jeffries", 20000m, 233456);
+            checkingAccount.Withdraw(1000m);
 
-        //    //act
-        //    var expected = 19000m;
-        //    var actual = checkingAccount.Balance;
+            //act
+            var expected = 19000m;
+            var actual = checkingAccount.Balance;
 
-        //    //assert
-        //    Assert.AreEqual(expected, actual);
-        //}
+            //assert
+            Assert.AreEqual(expected, actual);
+        }
 
         [TestMethod]
         public void CheckingAccount_TransferMethod_ValidateThatSavingsBalanceIncreases_ShouldSucceed()
@@ -82,23 +82,10 @@ namespace KomodoBank.Tests
         }
 
         [TestMethod]
-        public void CheckingAccount_CreateAdditionalCheckingAccountMethodIsTypeOf_ShouldSucceed()
-        {
-            //arrange
-            var newCheckingAccount = new BankService();
-            var actual = newCheckingAccount.CreateCheckingAccount("Jeffries", 1000m, 123456);
-
-            //act
-
-            //assert
-            Assert.IsInstanceOfType(actual, typeof(Checking));
-        }
-
-        [TestMethod]
         public void CheckingAccount_CreateAdditionalCheckingAccountMethod_ShouldSucceed()
         {
             //arrange
-            var newCheckingAccount = new BankService();
+            var newCheckingAccount = new CheckingRepo();
 
             //act
             var expected = 1000m;

@@ -8,23 +8,9 @@ using System.Threading.Tasks;
 
 namespace KomodoBank.BLL
 {
-    public class BankService : IMaster
+    public class BankService
     {
         private List<Account> _accountList = new List<Account>();
-
-        public Savings CreateSavingsAccountWithMinimumBalance(string nameInput, int idInput)
-        {
-            return new Savings(nameInput, idInput);
-        }
-        public Savings CreateSavingsAccount(string nameInput, decimal balanceInput, int idInput)
-        {
-            return new Savings(nameInput, balanceInput, idInput);
-        }
-
-        public Checking CreateCheckingAccount(string nameInput, decimal balanceInput, int idInput)
-        {
-            return new Checking(nameInput, balanceInput, idInput);
-        }
 
         public void AddAccountToMasterList(Account customer)
         {
@@ -36,31 +22,18 @@ namespace KomodoBank.BLL
             return _accountList;
         }
 
-        public List<Account> GetCheckingAccounts()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Account> GetSavingsAccounts()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Account> Search(string searchInput)
+        public List<Account> Search(int searchInput)
         {
             var contextedList = new List<Account>();
 
-            if (_accountList != null)
+            foreach (var customer in _accountList)
             {
-                foreach (var customer in _accountList)
+                if (customer.ID == searchInput)
                 {
-                    if (customer.LastName.Contains(searchInput))
-                    {
-                        contextedList.Add(customer);
-                    }
+                    contextedList.Add(customer);
                 }
             }
-
+            
             return contextedList;
         }
     }

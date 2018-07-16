@@ -93,6 +93,7 @@ namespace KomodoBank.Tests
 
             //assert
             Assert.AreEqual(expected, actual);
+            
         }
 
         [TestMethod]

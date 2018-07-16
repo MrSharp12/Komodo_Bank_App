@@ -33,7 +33,18 @@ namespace KomodoBank.BLL
         {
             return _savingsAccountList;
         }
-
-       
+        public bool ValidateSavingsAccount(int accountInput)
+        {
+            bool value;
+            if (_savingsAccountList.Exists(account => account.ID == accountInput))
+            {
+                value = true;
+            }
+            else
+            {
+                value = false;
+            }
+            return value;
+        }
     }
 }

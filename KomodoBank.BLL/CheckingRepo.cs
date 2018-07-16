@@ -25,5 +25,19 @@ namespace KomodoBank.BLL
         {
             return _checkingAccountList;
         }
+
+        public bool ValidateCheckingAccount(int accountInput)
+        {
+            bool value;
+            if (_checkingAccountList.Exists(account => account.ID == accountInput))
+            {
+                value = true;
+            }
+            else
+            {
+                value = false;
+            }
+            return value;
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace KomodoBank.Data
         public string LastName { get; private set; }
         public int ID { get; private set; }
 
-        public Savings() 
+        public Savings()
         {
         }
 
@@ -38,16 +38,16 @@ namespace KomodoBank.Data
             var balanceTotal = Balance -= withdrawAmount;
             if (balanceTotal < 0)
             {
-                throw new ArgumentException("Insufficient funds");
+                throw new Exception("Insufficient funds");
             }
-            else if (withdrawAmount >= 10000m)
+
+            if (withdrawAmount >= 10000m)
             {
                 throw new ArgumentException("You may not remove funds greater than or equal to 10,000 dollars in one transaction");
             }
-            else
-            {
-                Balance = balanceTotal;
-            }
+
+            Balance = balanceTotal;
+
         }
 
         public void Transfer(decimal transferAmount, Checking checkingAccount)
@@ -57,11 +57,10 @@ namespace KomodoBank.Data
             {
                 throw new ArgumentException("Insufficient funds");
             }
-            else
-            {
-                checkingAccount.Deposit(transferAmount);
-                Balance = balanceTotal;
-            }
+
+            checkingAccount.Deposit(transferAmount);
+            Balance = balanceTotal;
+
         }
     }
 }
